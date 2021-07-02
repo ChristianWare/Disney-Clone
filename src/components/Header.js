@@ -30,6 +30,14 @@ const Header = () => {
            <img src='/images/series-icon.svg' />
            <span>SERIES</span>   
           </a>
+          <a>
+           <img src='/images/series-icon.svg' />
+           <span>SERIES</span>   
+          </a>
+          <a>
+           <img src='/images/series-icon.svg' />
+           <span>SERIES</span>   
+          </a>
         </NavMenu>
         <UserImg src="/images/avatar.png" />
       </Nav>
