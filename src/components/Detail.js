@@ -1,41 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router";
+import db from '../firebase'
 
-const Detail = () => {
+function Detail() {
+  const { id } = useParams();
+  const [movie, setMovie] = useState({})
+
+  useEffect(() => {
+    // Grab the movie info from DB
+    db.collection('movies')
+    .doc(id)
+    .get()
+    .then((doc)=> {
+      if(doc.exists) {
+        // save the movie data
+        setMovie(doc.data());
+      }else {
+        console.log("no such comment in firebase")
+      }
+    })
+  }, [])
+
   return (
-    <Container>
-      <Background>
-        <img src='https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/4F39B7E16726ECF419DD7C49E011DD95099AA20A962B0B10AA1881A70661CE45/scale?width=1440&aspectRatio=1.78&format=jpeg' />
-      </Background>
-      <ImageTitle>
-        <img src='https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/D7AEE1F05D10FC37C873176AAA26F777FC1B71E7A6563F36C6B1B497CAB1CEC2/scale?width=1440&aspectRatio=1.78' />
-      </ImageTitle>
-      <Controls>
-        <PlayButton>
-          <img src='/images/play-icon-black.png' />
-          <span>PLAY</span>
-        </PlayButton>
-        <TrailerButton>
-          <img src='/images/play-icon-white.png' />
-          <span>Trailer</span>
-        </TrailerButton>
-        <AddButton>
-          <span>+</span>
-        </AddButton>
-        <GroupWatchButton>
-          <img src='/images/group-icon.png' />
-        </GroupWatchButton>
-      </Controls>
-      <SubTitle>2018 || 7m || Family, Fantasy, Kids, Animation</SubTitle>
-      <Description>
-        In Toronto, Canada, a Chinese Canadian woman cooks a meal of baozi for
-        her and her husband. One of her buns comes alive, much to her shock. She
-        raises the dumpling as a child, feeding it and caring for the bun, who
-        enjoys the time he spends with her. Eventually the child sees other
-        children playing and wishes to join them, but the overprotective mother
-        refuses to allow him to do so, much to his ire. 
-      </Description>
-    </Container>
+    <>
+      <Container>
+        <Background>
+          <img src={movie.backgroundImg} />
+        </Background>
+        <ImageTitle>
+          <img src={movie.titleImg} />
+        </ImageTitle>
+        <Controls>
+          <PlayButton>
+            <img src='/images/play-icon-black.png' />
+            <span>PLAY</span>
+          </PlayButton>
+          <TrailerButton>
+            <img src='/images/play-icon-white.png' />
+            <span>Trailer</span>
+          </TrailerButton>
+          <AddButton>
+            <span>+</span>
+          </AddButton>
+          <GroupWatchButton>
+            <img src='/images/group-icon.png' />
+          </GroupWatchButton>
+        </Controls>
+        <SubTitle>{movie.subTitle}</SubTitle>
+        <Description>
+          {movie.description}
+        </Description>
+      </Container>
+    </>
   );
 };
 
@@ -64,16 +81,19 @@ const Background = styled.div`
 `;
 
 const ImageTitle = styled.div`
-  height: 30vh;
+  align-items: flex-end;
+  display: flex;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  margin: 0px auto;
+  height: 30vw;
   min-height: 170px;
-  width: 35vw;
-  min-width: 200px;
-  margin-top: 60px;
-
+  padding-bottom: 24px;
+  width: 100%;
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    max-width: 600px;
+    min-width: 200px;
+    width: 35vw;
   }
 `;
 
